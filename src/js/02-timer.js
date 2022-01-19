@@ -1,7 +1,7 @@
 import 'flatpickr/dist/flatpickr.min.css';
 import flatpickr from 'flatpickr';
 // Set the date we're counting down to
-const countDownDate = new Date('Jan 20, 2022 11:37:25').getTime();
+const countDownDate = new Date('Jan 20, 2022 13:37:25').getTime();
 
 // Update the count down every 1 second
 const x = setInterval(function () {
