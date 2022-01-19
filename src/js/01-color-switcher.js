@@ -1,7 +1,7 @@
 // ======== СПОСОБ №2 ========
 const { startBtn, stopBtn, body, resetBtn } = refs;
 
-const INTERVAL_TIME = 900;
+const INTERVAL_TIME = 1000;
 let intervalId = null;
 
 // - Вызовы слушателей (обработчиков) события
