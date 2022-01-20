@@ -2,12 +2,12 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-let initDate = null;
 const currentDate = Date.now();
 const btnStart = document.querySelector('button[data-start]');
 btnStart.disabled = true;
 const input = document.querySelector('.timer');
 const inputF = document.querySelector('.field');
+let initDate = null;
 
 const options = {
   enableTime: true,
