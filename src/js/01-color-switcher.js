@@ -5,7 +5,7 @@ function getRandomHexColor() {
 // после нажатия кнопки «Start», раз в секунду меняет цвет фона <body> на случайное значение используя инлайн стиль.
 
 const btnStart = document.querySelector('button[data-start]');
-console.log('~ file: 01-color-switcher.js ~ line 2 ~ btnStart', btnStart);
+console.log('file: 01-color-switcher.js ~ line 2 ~ btnStart', btnStart);
 
 // При нажатии на кнопку «Stop», изменение цвета фона должно останавливаться.
 const btnStop = document.querySelector('button[data-stop]');
