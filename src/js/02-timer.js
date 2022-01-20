@@ -1,29 +1,70 @@
-import 'flatpickr/dist/flatpickr.min.css';
 import flatpickr from 'flatpickr';
-// Set the date we're counting down to
-const countDownDate = new Date('Jan 20, 2022 13:37:25').getTime();
+import 'flatpickr/dist/flatpickr.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-// Update the count down every 1 second
-const x = setInterval(function () {
-  // Get today's date and time
-  const now = new Date().getTime();
+let initDate = null;
+const currentDate = Date.now();
+const btnStart = document.querySelector('button[data-start]');
+btnStart.disabled = true;
+const input = document.querySelector('.timer');
+const inputF = document.querySelector('.field');
 
-  // Find the distance between now and the count down date
-  const distance = countDownDate - now;
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    initDate = selectedDates[0];
+    if (initDate > currentDate) {
+      btnStart.disabled = false;
+    } else {
+      Notify.failure('Please choose a date in the future');
+      // window.alert("Please choose a date in the future")
+    }
+  },
+};
 
-  // Time calculations for days, hours, minutes and seconds
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+const fpickr = flatpickr('#datetime-picker', options);
+// console.log("🚀 ~ fpickr---", fpickr.element.value);
+const daysEl = document.querySelector('span[data-days]');
+const hoursEl = document.querySelector('span[data-hours]');
+const minutesEl = document.querySelector('span[data-minutes]');
+const secondsEl = document.querySelector('span[data-seconds]');
 
-  // Display the result in the element with id="datetime-picker"
-  document.getElementById('datetime-picker').innerHTML =
-    days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
+btnStart.addEventListener('click', () => {
+  const intervalId = setInterval(() => {
+    const currentDate = Date.now();
+    let alfaDate = initDate - currentDate;
+    daysEl.textContent = convertMs(alfaDate).days;
+    hoursEl.textContent = convertMs(alfaDate).hours;
+    minutesEl.textContent = convertMs(alfaDate).minutes;
+    secondsEl.textContent = convertMs(alfaDate).seconds;
+    btnStart.disabled = true;
+    fpickr.input.setAttribute('disabled', 'disabled');
+  }, 1000);
+});
 
-  // If the count down is finished, write some text
-  if (distance < 0) {
-    clearInterval(x);
-    document.getElementById('datetime-picker').innerHTML = 'EXPIRED';
-  }
-}, 1000);
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
+function convertMs(ms) {
+  // Number of milliseconds per unit of time
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+  // Remaining days
+  const days = Math.floor(ms / day);
+  // Remaining hours
+  const hours = addLeadingZero(Math.floor((ms % day) / hour));
+  // Remaining minutes
+  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+  // Remaining seconds
+  const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
+
+  return { days, hours, minutes, seconds };
+}
+console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
